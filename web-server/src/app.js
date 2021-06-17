@@ -1,6 +1,8 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 
 console.log(__dirname)
 // console.log(__filename)
@@ -51,16 +53,35 @@ app.get('/help', (req, res) => {
 
 // app.com/weather
 app.get('/weather', (req, res) => {
-    if(!req.query.address) {
+    const address = req.query.address
+
+    if(!address) {
         return res.send({
             error: 'Please provide an address to proceed!'
         })
     }
 
-    res.send({
-        forecast: 'Partly cloudy',
-        location: 'Philadelphia',
-        address: req.query.address
+    geocode(address, (error, { latitude, longitude, location } = {} ) => { // Object Destructuring syntax
+        if(error) {
+            return console.log(error)
+        }
+    
+        // forecast(geoCodeData.latitude, geoCodeData.longitude, (error, forecastData) => { // Callback chaining
+        forecast(latitude, longitude, (error, forecastData) => {
+            if(error) {
+                return console.log(error)
+            }
+            
+            // console.log(geoCodeData.location)
+            // console.log(location)
+            // console.log(forecastData)
+
+            res.send({
+                forecast: forecastData,
+                location,
+                address
+            })
+        })
     })
 })
 
