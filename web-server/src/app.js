@@ -63,13 +63,13 @@ app.get('/weather', (req, res) => {
 
     geocode(address, (error, { latitude, longitude, location } = {} ) => { // Object Destructuring syntax
         if(error) {
-            return console.log(error)
+            return res.send({error})
         }
     
         // forecast(geoCodeData.latitude, geoCodeData.longitude, (error, forecastData) => { // Callback chaining
         forecast(latitude, longitude, (error, forecastData) => {
             if(error) {
-                return console.log(error)
+                return res.send({error})
             }
             
             // console.log(geoCodeData.location)

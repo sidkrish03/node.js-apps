@@ -14,7 +14,7 @@ const forecast = (latitude, longitude, callback) => {
     const url = 'http://api.weatherstack.com/current?access_key=ac3ce2e7c1795433968c3056e0d3c326&query=' + latitude + ',' + longitude + '&units=f'
 
     // request({ url: url, json: true }, (error, response) => {
-    request({ url, json: true }, (error, { body }) => {    // Object Property Shorthand Syntax of 'url' and Destructuring reponse
+    request({ url, json: true }, (error, { body } = {}) => {    // Object Property Shorthand Syntax of 'url' and Destructuring reponse
         if(error) { 
             callback('Unable to connect to weather services!', undefined)
         } else if(body.error) { // Bad coordinates
